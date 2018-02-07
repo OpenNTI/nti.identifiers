@@ -76,7 +76,7 @@ def ExternalIdentityContainerFactory(obj):
 
 @component.adapter(IUser)
 @interface.implementer(IUserExternalIdentityValidator)
-class _UserExternalIdentityValidator(object):
+class UserExternalIdentityValidator(object):
 
     def __init__(self, context):
         self.user = self.context = context
@@ -90,3 +90,4 @@ class _UserExternalIdentityValidator(object):
             found_external_id = identity_container.get(external_type, '')
             result = found_external_id.lower() == external_id.lower()
         return result
+_UserExternalIdentityValidator = UserExternalIdentityValidator # BWC

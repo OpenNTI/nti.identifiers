@@ -52,8 +52,8 @@ def get_external_identifiers(user):
     Fetches a dict (external_type:external_id) of external identifiers for
     this user in this site.
     """
-    identity_container = IUserExternalIdentityContainer(user)
     result = {}
+    identity_container = IUserExternalIdentityContainer(user)
     if identity_container:
         current_site = getSite()
         current_site_names = get_component_hierarchy_names(current_site)

@@ -179,3 +179,15 @@ class TestIndex(unittest.TestCase):
                         ValidatingExternalIdentifiers):
             with self.assertRaises(TypeError):
                 pickle.dumps(factory(None, None))
+
+    @fudge.patch('nti.identifiers.utils.get_component_hierarchy_names')
+    def test_coverage(self, mock_names):
+        mock_names.is_callable().returns([])
+        user1 = User(username="marko")
+        # pylint: disable=too-many-function-args
+        id_container1 = IUserExternalIdentityContainer(user1)
+        id_container1.add_external_mapping('TYPE1', 'ID1')
+
+        m = get_external_identifiers(user1)
+        assert_that(m, has_length(1))
+        assert_that(m, has_entries('TYPE1', 'ID1'))

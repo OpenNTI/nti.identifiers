@@ -14,7 +14,7 @@
              provides=".interfaces.IUserExternalIdentityContainer"
              for="nti.coremetadata.interfaces.IUser" />
 
-    <adapter factory=".adapters._UserExternalIdentityValidator"
+    <adapter factory=".adapters.UserExternalIdentityValidator"
              provides=".interfaces.IUserExternalIdentityValidator"
              for="nti.coremetadata.interfaces.IUser" />
 

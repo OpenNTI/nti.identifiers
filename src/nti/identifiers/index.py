@@ -94,8 +94,8 @@ class ValidatingSiteName(object):
     __slots__ = ('site',)
 
     def __init__(self, obj, unused_default=None):
-        if IUser.providedBy(obj):
-            self.site = getattr(getSite(), '__name__', None)
+        external_container = IUserExternalIdentityContainer(obj, None)
+        self.site = getattr(external_container, 'site_name', None)
 
     def __reduce__(self):
         raise TypeError()

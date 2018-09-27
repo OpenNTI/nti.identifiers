@@ -66,16 +66,14 @@ class TestIndex(unittest.TestCase):
     layer = SharedConfiguringTestLayer
 
     @fudge.patch('nti.identifiers.utils.get_component_hierarchy_names',
-                 'nti.identifiers.adapters.getSite',
-                 'nti.identifiers.index.getSite',)
-    def test_index(self, mock_names, mock_adp, mock_index):
+                 'nti.identifiers.adapters.getSite')
+    def test_index(self, mock_names, mock_adp):
         """
         Validate the index contains the correct external_ids for users.
         """
         # fake getSite()
         fake_site = fudge.Fake().has_attr(__name__='mysite')
         mock_adp.is_callable().returns(fake_site)
-        mock_index.is_callable().returns(fake_site)
 
         # get get_component_hierarchy_names
         mock_names.is_callable().returns(['mysite'])

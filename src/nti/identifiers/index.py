@@ -14,8 +14,6 @@ from zope import component
 
 from zope.catalog.interfaces import ICatalog
 
-from zope.component.hooks import getSite
-
 from zope.intid.interfaces import IIntIds
 
 from zope.location import locate
@@ -54,6 +52,7 @@ class ValidatingExternalIdentifiers(object):
     def _get_external_ids(self, user):
         external_container = IUserExternalIdentityContainer(user, None)
         if external_container is not None:
+            # pylint: disable=too-many-function-args
             return set(x.lower() for x in external_container.values())
 
     def __init__(self, obj, unused_default=None):
@@ -106,12 +105,12 @@ class SingleSiteIndex(ValueIndex):
     default_interface = ValidatingSiteName
 
 
-class ExternalIdIndex(AttributeSetIndex):
+class ExternalIdIndex(AttributeSetIndex):  # pylint: disable=inconsistent-mro
     default_field_name = 'external_ids'
     default_interface = ValidatingExternalIdentifiers
 
 
-class ExternalTypesIndex(AttributeSetIndex):
+class ExternalTypesIndex(AttributeSetIndex):  # pylint: disable=inconsistent-mro
     default_field_name = 'external_types'
     default_interface = ValidatingExternalTypes
 

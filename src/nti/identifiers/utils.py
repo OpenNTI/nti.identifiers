@@ -74,6 +74,11 @@ def _is_valid(user, external_type, external_id):
     return validator.is_valid(external_type, external_id)
 
 
+def _is_site_matched(user, target_site):
+    identity_container = IUserExternalIdentityContainer(user)
+    return bool(identity_container.site_name == target_site)
+
+
 def get_user_for_external_id(external_type, external_id):
     """
     Find any user associated with the given external id and external_type, for
@@ -92,6 +97,8 @@ def get_user_for_external_id(external_type, external_id):
     }
     if site_names:
         query[IX_SITE] = {'any_of': site_names}
+
+    users = []
     for uid in catalog.apply(query) or ():
         # We store collections of a users' external_ids and external_types
         # instead of the one-to-one relationship between a external_type and
@@ -101,6 +108,12 @@ def get_user_for_external_id(external_type, external_id):
         user = intids.queryObject(uid)
         if      IUser.providedBy(user) \
             and _is_valid(user, external_type, external_id):
-            result = user
-            break
+            users.append(user)
+
+    # Prefer user coming from current site, then parent site.
+    for site_name in site_names or ():
+        for user in users:
+            if _is_site_matched(user, site_name):
+                return user
+
     return result

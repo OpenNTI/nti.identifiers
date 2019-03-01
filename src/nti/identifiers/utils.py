@@ -110,10 +110,13 @@ def get_user_for_external_id(external_type, external_id):
             and _is_valid(user, external_type, external_id):
             users.append(user)
 
+    if len(users) == 1:
+        # Useful for tests, return our single user.
+        return users[0]
+
     # Prefer user coming from current site, then parent site.
     for site_name in site_names or ():
         for user in users:
             if _is_site_matched(user, site_name):
                 return user
-
     return result
